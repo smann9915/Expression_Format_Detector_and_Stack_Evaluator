@@ -1,16 +1,118 @@
 #include <iostream>
+#include <vector>
+#include <string>
+#include <unordered_map>
+#include <cctype>
 
-// TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+#include "ArrayStack.h"
+
+using namespace std;
+
+// Token
+
+struct Token {
+    string value;   // number, operator, or parenthesis
+};
+
+// Tokenizer
+
+vector<Token> tokenize(const string& line) {
+    vector<Token> tokens;
+
+    Token token = Token();
+    for (int i = 0; i < line.length(); i++) {
+        if (line.substr(i, 1) == " ") {
+            if (token.value != "") tokens.push_back(token);
+            token.value = "";
+        }
+        else if (line.substr(i, 1) == "(" || line.substr(i, 1) == ")") {
+            if (token.value != "") tokens.push_back(token);
+
+            token.value = line.substr(i, 1);
+            tokens.push_back(token);
+            token.value = "";
+        }
+        else {
+            token.value += line.substr(i, 1);
+        }
+    }
+
+    if (token.value != "") {
+        tokens.push_back(token);
+    }
+
+    return tokens;
+}
+
+// Helpers
+
+bool isOperator(const string& s) {
+    return s == "+" || s == "-" || s == "*" || s == "/";
+}
+
+int precedence(const string& op) {
+    // TODO
+    return 0;
+}
+
+// Detection
+
+bool isValidPostfix(const vector<Token>& tokens) {
+    // TODO
+    return false;
+}
+
+bool isValidInfix(const vector<Token>& tokens) {
+    // TODO
+    return false;
+}
+
+// Conversion
+
+vector<Token> infixToPostfix(const vector<Token>& tokens) {
+    vector<Token> output;
+    // TODO
+    return output;
+}
+
+// Evaluation
+
+double evalPostfix(const vector<Token>& tokens) {
+    ArrayStack<double> stack;
+    // TODO
+    return 0.0;
+}
+
+// Main
+
 int main() {
-    // TIP Press <shortcut actionId="RenameElement"/> when your caret is at the <b>lang</b> variable name to see how CLion can help you rename it.
-    auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
+    string line;
+    getline(cin, line);
 
-    for (int i = 1; i <= 5; i++) {
-        // TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        std::cout << "i = " << i << std::endl;
+    vector<Token> tokens = tokenize(line);
+
+    for (const auto& t : tokens) {
+        cout << t.value << ", ";
+    }
+
+    if (isValidPostfix(tokens)) {
+        cout << "FORMAT: POSTFIX\n";
+        cout << "RESULT: " << evalPostfix(tokens) << "\n";
+    }
+    else if (isValidInfix(tokens)) {
+        vector<Token> postfix = infixToPostfix(tokens);
+        cout << "FORMAT: INFIX\n";
+        cout << "POSTFIX: ";
+        for (const auto& t : postfix) {
+            cout << t.value << " ";
+        }
+        cout << "\n";
+        cout << "RESULT: " << evalPostfix(postfix) << "\n";
+    }
+    else {
+        cout << "FORMAT: NEITHER\n";
+        cout << "ERROR: invalid expression\n";
     }
 
     return 0;
-    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }
