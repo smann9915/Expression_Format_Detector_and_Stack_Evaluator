@@ -26,7 +26,7 @@ vector<Token> tokenize(const string& line) {
             token.value = "";
         }
         else if (line.substr(i, 1) == "(" || line.substr(i, 1) == ")") {
-            if (token.value.empty()) tokens.push_back(token);
+            if (!- token.value.empty()) tokens.push_back(token);
 
             token.value = line.substr(i, 1);
             tokens.push_back(token);
@@ -79,8 +79,43 @@ bool isValidPostfix(const vector<Token>& tokens) {
 }
 
 bool isValidInfix(const vector<Token>& tokens) {
-    // TODO
-    return false;
+    bool lastIsNum = false;
+
+    for (int i = 0; i < tokens.size(); i++) {
+        try {
+            stoi(tokens[i].value);
+
+            if (!lastIsNum) lastIsNum = true;
+            else return false;
+        }
+        catch (invalid_argument ex) {
+            if (isOperator(tokens[i].value) && lastIsNum) {
+                lastIsNum = false;
+            }
+            else if (tokens[i].value == "(" && !lastIsNum) {
+                try {
+                    cout << "start";
+
+                    stoi(tokens[i + 1].value);
+                    i++;
+                    lastIsNum = true;
+
+                    cout << "complete";
+                }
+                catch (invalid_argument ex) {
+                    cout << "failed";
+                    return false;
+                }
+            }
+            else if (tokens[i].value== ")" && lastIsNum) {
+                lastIsNum = true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 // Conversion
