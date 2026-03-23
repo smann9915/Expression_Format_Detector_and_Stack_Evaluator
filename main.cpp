@@ -22,11 +22,11 @@ vector<Token> tokenize(const string& line) {
     Token token = Token();
     for (int i = 0; i < line.length(); i++) {
         if (line.substr(i, 1) == " ") {
-            if (token.value != "") tokens.push_back(token);
+            if (!token.value.empty()) tokens.push_back(token);
             token.value = "";
         }
         else if (line.substr(i, 1) == "(" || line.substr(i, 1) == ")") {
-            if (token.value != "") tokens.push_back(token);
+            if (token.value.empty()) tokens.push_back(token);
 
             token.value = line.substr(i, 1);
             tokens.push_back(token);
@@ -58,8 +58,24 @@ int precedence(const string& op) {
 // Detection
 
 bool isValidPostfix(const vector<Token>& tokens) {
-    // TODO
-    return false;
+    int numbers = 0;
+    int operators = 0;
+
+    for (int i = 0; i < tokens.size(); i++) {
+         try {
+             stoi(tokens[i].value);
+             numbers++;
+         }
+         catch (invalid_argument ex) {
+            if (isOperator(tokens[i].value) && numbers > operators) {
+                operators++;
+            }
+            else {
+                return false;
+            }
+         }
+     }
+    return numbers == operators + 1;
 }
 
 bool isValidInfix(const vector<Token>& tokens) {
@@ -94,6 +110,8 @@ int main() {
     for (const auto& t : tokens) {
         cout << t.value << ", ";
     }
+
+    cout << endl << endl;
 
     if (isValidPostfix(tokens)) {
         cout << "FORMAT: POSTFIX\n";
