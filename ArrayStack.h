@@ -11,11 +11,17 @@ private:
 
 public:
     void push(const T& value) {
-        // TODO
+        data.push_back(value);
+
     }
 
     void pop() {
-        // TODO
+        if (empty()) {
+            std::cout << "Nothign to pop" << std::endl;
+            return;
+        }
+
+        return data.pop_back();
     }
 
     T top() const {
@@ -24,13 +30,11 @@ public:
     }
 
     bool empty() const {
-        // TODO
-        return true;
+        return data.empty();
     }
 
     int size() const {
-        // TODO
-        return 0;
+        return data.size();
     }
 };
 
