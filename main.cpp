@@ -67,7 +67,7 @@ bool isValidPostfix(const vector<Token>& tokens) {
              numbers++;
          }
          catch (invalid_argument ex) {
-            if (isOperator(tokens[i].value) && numbers > operators) {
+            if (isOperator(tokens[i].value) && numbers > operators + 1) {
                 operators++;
             }
             else {
@@ -94,16 +94,11 @@ bool isValidInfix(const vector<Token>& tokens) {
             }
             else if (tokens[i].value == "(" && !lastIsNum) {
                 try {
-                    cout << "start";
-
                     stoi(tokens[i + 1].value);
                     i++;
                     lastIsNum = true;
-
-                    cout << "complete";
                 }
                 catch (invalid_argument ex) {
-                    cout << "failed";
                     return false;
                 }
             }
@@ -122,7 +117,24 @@ bool isValidInfix(const vector<Token>& tokens) {
 
 vector<Token> infixToPostfix(const vector<Token>& tokens) {
     vector<Token> output;
-    // TODO
+
+    for (int i = 0; i < tokens.size(); i++) {
+        if (tokens[i].value == "(" || tokens[i].value == ")") {
+            //Ignore parenthsis for now
+        }
+        else if (isOperator(tokens[i].value)) {
+            //Add the next number before the operator
+            output.push_back(tokens[i + 1]);
+            //Add the operator
+            output.push_back(tokens[i]);
+            //Increment to account for adding the next number as well
+            i++;
+        }
+        else {
+            output.push_back(tokens[i]);
+        }
+    }
+
     return output;
 }
 
