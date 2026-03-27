@@ -17,7 +17,7 @@ public:
 
     void pop() {
         if (empty()) {
-            std::cout << "Nothign to pop" << std::endl;
+            std::cout << "Nothing to pop" << std::endl;
             return;
         }
 
@@ -26,7 +26,7 @@ public:
 
     T top() const {
         // TODO
-        return T();
+        return data[data.size() - 1];
     }
 
     bool empty() const {

@@ -120,7 +120,7 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
 
     for (int i = 0; i < tokens.size(); i++) {
         if (tokens[i].value == "(" || tokens[i].value == ")") {
-            //Ignore parenthsis for now
+            //Ignore parenthsis for nowm
         }
         else if (isOperator(tokens[i].value)) {
             //Add the next number before the operator
@@ -142,8 +142,35 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
 
 double evalPostfix(const vector<Token>& tokens) {
     ArrayStack<double> stack;
-    // TODO
-    return 0.0;
+
+    for (int i = 0; i < tokens.size(); i++) {
+        try {
+            double num = stod(tokens[i].value);
+            stack.push(num);
+        }
+        catch (invalid_argument ex) {
+            double num1 = stack.top();
+            stack.pop();
+
+            double num2 = stack.top();
+            stack.pop();
+
+            if (tokens[i].value == "+") {
+                stack.push(num2 + num1);
+            }
+            else if (tokens[i].value == "-") {
+                stack.push(num2 - num1);
+            }
+            else if (tokens[i].value == "*") {
+                stack.push(num2 * num1);
+            }
+            else {
+                stack.push(num2 / num1);
+            }
+        }
+    }
+
+    return stack.top();
 }
 
 // Main
