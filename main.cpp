@@ -117,22 +117,41 @@ bool isValidInfix(const vector<Token>& tokens) {
 
 vector<Token> infixToPostfix(const vector<Token>& tokens) {
     vector<Token> output;
+    vector<Token> operators;
 
     for (int i = 0; i < tokens.size(); i++) {
-        if (tokens[i].value == "(" || tokens[i].value == ")") {
-            //Ignore parenthsis for nowm
+        if (tokens[i].value == "(" || tokens[i].value == "*" || tokens[i].value == "/") {
+            operators.push_back(tokens[i]);
         }
-        else if (isOperator(tokens[i].value)) {
-            //Add the next number before the operator
-            output.push_back(tokens[i + 1]);
-            //Add the operator
-            output.push_back(tokens[i]);
-            //Increment to account for adding the next number as well
-            i++;
+        else if (tokens[i].value == "+" || tokens[i].value == "-") {
+            if (operators.empty()) operators.push_back(tokens[i]);
+
+            else if (operators.back().value == "*" || operators.back().value == "/") {
+                output.push_back(operators.back());
+                operators.pop_back();
+                operators.push_back(tokens[i]);
+            }
+            else {
+                operators.push_back(tokens[i]);
+            }
+        }
+        else if (tokens[i].value == ")") {
+            while (true) {
+                Token op = operators[operators.size() - 1];
+                operators.pop_back();
+                if (op.value == "(") {
+                    break;
+                }
+                output.push_back(op);
+            }
         }
         else {
             output.push_back(tokens[i]);
         }
+    }
+
+    for (int i = 0; i < operators.size(); i++) {
+        output.push_back(operators[i]);
     }
 
     return output;
