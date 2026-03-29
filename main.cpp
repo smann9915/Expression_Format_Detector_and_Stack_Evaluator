@@ -150,8 +150,9 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
         }
     }
 
-    for (int i = 0; i < operators.size(); i++) {
-        output.push_back(operators[i]);
+    while (!operators.empty()) {
+        output.push_back(operators.back());
+        operators.pop_back();
     }
 
     return output;
