@@ -1,4 +1,4 @@
- #ifndef ARRAYSTACK_H
+#ifndef ARRAYSTACK_H
 #define ARRAYSTACK_H
 
 #include <optional>

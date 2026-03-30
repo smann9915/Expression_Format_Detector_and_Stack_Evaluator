@@ -57,15 +57,16 @@ Edge Case ArrayStack + InfixToPostfix with ArrayStack
 ---
 
 ### Entry 5
-**Date:** YYYY-MM-DD  
-**Entry Type:** Bug Fix / Edge Case / Engineering Decision  
-**Task worked on:**  
-**Issue or decision:**  
-**Error message / symptom (if applicable):**  
-**What I tried:**  
-**Fix / resolution (or final decision):**  
+**Date:** 2026-03-30  
+**Entry Type:** Bug Fix 
+**Task worked on:**  isValidPostfix
+**Issue or decision:**  How to interpret what is valid postfix. \
+**Error message / symptom (if applicable):** Allowed invalid entries such as 7 - as postfix.  \
+**What I tried:** Only allowing operators when operators < numbers + 1. \
+**Fix / resolution (or final decision):**  I realized it should have been numbers - 1 > operators as previously given
+one operator and one number it would allow it as 0 < 1 + 1 but with 1 - 1 > 0 it returns false matching postfixes conditions.
 **Commit(s):**  
-
+Corrected isValidPostfix
 ---
 
 ### Entry 6

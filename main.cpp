@@ -37,7 +37,7 @@ vector<Token> tokenize(const string& line) {
         }
     }
 
-    if (token.value.empty()) {
+    if (!token.value.empty()) {
         tokens.push_back(token);
     }
 
@@ -69,7 +69,7 @@ bool isValidPostfix(const vector<Token>& tokens) {
              numbers++;
          }
          catch (invalid_argument ex) {
-            if (isOperator(tokens[i].value) && numbers > operators) {
+            if (isOperator(tokens[i].value) && numbers - 1 > operators) {
                 operators++;
             }
             else {
