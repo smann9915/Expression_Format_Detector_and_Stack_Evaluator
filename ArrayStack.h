@@ -1,6 +1,7 @@
  #ifndef ARRAYSTACK_H
 #define ARRAYSTACK_H
 
+#include <optional>
 #include <vector>
 #include <stdexcept>
 
@@ -17,15 +18,18 @@ public:
 
     void pop() {
         if (empty()) {
-            std::cout << "Nothing to pop" << std::endl;
-            return;
+            std::cerr << "Nothing to pop" << std::endl;
+            std::exit(1);
         }
 
         return data.pop_back();
     }
 
     T top() const {
-        // TODO
+        if (empty()) {
+            std::cerr << "The stack is empty." << std::endl;
+            std::exit(1);
+        }
         return data[data.size() - 1];
     }
 

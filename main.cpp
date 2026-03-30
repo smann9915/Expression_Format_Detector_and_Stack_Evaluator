@@ -26,7 +26,7 @@ vector<Token> tokenize(const string& line) {
             token.value = "";
         }
         else if (line.substr(i, 1) == "(" || line.substr(i, 1) == ")") {
-            if (!- token.value.empty()) tokens.push_back(token);
+            if (!token.value.empty()) tokens.push_back(token);
 
             token.value = line.substr(i, 1);
             tokens.push_back(token);
@@ -37,7 +37,7 @@ vector<Token> tokenize(const string& line) {
         }
     }
 
-    if (token.value != "") {
+    if (token.value.empty()) {
         tokens.push_back(token);
     }
 
@@ -51,7 +51,9 @@ bool isOperator(const string& s) {
 }
 
 int precedence(const string& op) {
-    // TODO
+    if (op == "*" || op == "/") {
+        return 1;
+    }
     return 0;
 }
 
@@ -67,7 +69,7 @@ bool isValidPostfix(const vector<Token>& tokens) {
              numbers++;
          }
          catch (invalid_argument ex) {
-            if (isOperator(tokens[i].value) && numbers > operators + 1) {
+            if (isOperator(tokens[i].value) && numbers > operators) {
                 operators++;
             }
             else {
@@ -117,28 +119,28 @@ bool isValidInfix(const vector<Token>& tokens) {
 
 vector<Token> infixToPostfix(const vector<Token>& tokens) {
     vector<Token> output;
-    vector<Token> operators;
+    ArrayStack<Token> operators;
 
     for (int i = 0; i < tokens.size(); i++) {
-        if (tokens[i].value == "(" || tokens[i].value == "*" || tokens[i].value == "/") {
-            operators.push_back(tokens[i]);
+        if (tokens[i].value == "(" || precedence(tokens[i].value) == 1) {
+            operators.push(tokens[i]);
         }
-        else if (tokens[i].value == "+" || tokens[i].value == "-") {
-            if (operators.empty()) operators.push_back(tokens[i]);
+        else if (precedence(tokens[i].value) == 0) {
+            if (operators.empty()) operators.push(tokens[i]);
 
-            else if (operators.back().value == "*" || operators.back().value == "/") {
-                output.push_back(operators.back());
-                operators.pop_back();
-                operators.push_back(tokens[i]);
+            else if (precedence(operators.top().value) == 1) {
+                output.push_back(operators.top());
+                operators.pop();
+                operators.push(tokens[i]);
             }
             else {
-                operators.push_back(tokens[i]);
+                operators.push(tokens[i]);
             }
         }
         else if (tokens[i].value == ")") {
             while (true) {
-                Token op = operators[operators.size() - 1];
-                operators.pop_back();
+                Token op = operators.top();
+                operators.pop();
                 if (op.value == "(") {
                     break;
                 }
@@ -151,8 +153,8 @@ vector<Token> infixToPostfix(const vector<Token>& tokens) {
     }
 
     while (!operators.empty()) {
-        output.push_back(operators.back());
-        operators.pop_back();
+        output.push_back(operators.top());
+        operators.pop();
     }
 
     return output;
