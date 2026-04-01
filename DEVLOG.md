@@ -70,11 +70,15 @@ Corrected isValidPostfix
 ---
 
 ### Entry 6
-**Date:** YYYY-MM-DD  
-**Entry Type:** Bug Fix / Edge Case / Engineering Decision  
-**Task worked on:**  
-**Issue or decision:**  
-**Error message / symptom (if applicable):**  
-**What I tried:**  
-**Fix / resolution (or final decision):**  
+**Date:** 2026-03-31  
+**Entry Type:** Bug Fix 
+**Task worked on:**  isValidInfix \
+**Issue or decision:**  How to handle detection of parenthesis being valid. \
+**Error message / symptom (if applicable):**  Couldn't handle parenthesis. \
+**What I tried:**  I initially had it where it only checked if it was number and then operator and made sure that 
+pattern held but then "7 +" would be and parenthesis were handle where the left parenthesis wasn't checked to have a right one. \
+**Fix / resolution (or final decision):**  I realized that my infixToPostfix was wrong as my precedence returned 0 for any input not 
+"*" or "/" which caused issues meaning no numbers would be handled, so I switched it to check and return 0 for "+" and "-".
+The other fix to make parenthesis work was to add when given a left parenthesis and subtract when finding a right one and returning true only if that variable is at 0 meaning there is an equal number of both left and right parenthesis. \
 **Commit(s):**  
+Corrected isValidInfix
